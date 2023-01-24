@@ -1,4 +1,5 @@
 from .exceptions import FyleError
+from marshmallow import ValidationError
 
 
 def base_assert(error_code, msg):
@@ -15,9 +16,12 @@ def assert_true(cond, msg='FORBIDDEN'):
         base_assert(403, msg)
 
 
-def assert_valid(cond, msg='BAD_REQUEST'):
+def assert_valid(cond, msg='BAD_REQUEST', case="base"):
     if cond is False:
-        base_assert(400, msg)
+        if case == "grade":
+            raise ValidationError(400, msg)
+        else:
+            base_assert(400, msg)
 
 
 def assert_found(_obj, msg='NOT_FOUND'):
